@@ -9,24 +9,36 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/db4free', (request, response) => {
-	conDb4free.query("select * from datos", (err, result, fields) => {
-		// Si hay error
-		if (err) throw err;
+	conDb4free.getConnection(function(err, connection) {
+		if (err) throw err; // not connected!
+	  	
+		connection.query("select * from datos", (err, result, fields) => {
+			// Si hay error
+			if (err) throw err;
 
-		// Ok va respuesta a la consola tambien 
-		console.log(result);
-		response.send(result); 
+			// Ok va respuesta a la consola tambien 
+			console.log(result);
+			response.send(result); 
+
+			connection.release();
+		});
 	});
 });
 
 app.get('/remote', (request, response) => {
-	conRemote.query("select * from datos", (err, result, fields) => {
-		// Si hay error
-		if (err) throw err;
+	conRemote.getConnection(function(err, connection) {
+		if (err) throw err; // not connected!
+	  	
+		connection.query("select * from datos", (err, result, fields) => {
+			// Si hay error
+			if (err) throw err;
 
-		// Ok va respuesta a la consola tambien 
-		console.log(result);
-		response.send(result); 
+			// Ok va respuesta a la consola tambien 
+			console.log(result);
+			response.send(result); 
+
+			connection.release();
+		});
 	});
 });
 

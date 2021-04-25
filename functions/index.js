@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const conDb4free = require("./data/dbDBFree");
 const conRemote = require("./data/dbRemote");
+const functions = require("firebase-functions");
 
 const app = express();
 
@@ -30,6 +31,10 @@ app.get('/remote', (request, response) => {
 	});
 });
 
-app.listen(process.env.PORT || 5001, () => {
+/*
+app.listen(5001, () => {
  console.log("El servidor está inicializado en el puerto 5001");
 });
+*/
+
+exports.app = functions.https.onRequest(app);

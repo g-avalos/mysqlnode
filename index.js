@@ -1,45 +1,23 @@
 const express = require("express");
 const bodyParser = require('body-parser');
-const conDb4free = require("./data/dbDBFree");
-const conRemote = require("./data/dbRemote");
+const UsuarioDaoReq = require("./dao/usuarioDao");
 
+let usuarioDao = new UsuarioDaoReq()
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/db4free', (request, response) => {
-	conDb4free.getConnection(function(err, connection) {
-		if (err) throw err; // not connected!
-	  	
-		connection.query("select * from datos", (err, result, fields) => {
-			// Si hay error
-			if (err) throw err;
-
-			// Ok va respuesta a la consola tambien 
-			console.log(result);
-			response.send(result); 
-
-			connection.release();
-		});
-	});
+	usuarioDao.getDB4(request, response); 
 });
 
 app.get('/remote', (request, response) => {
-	conRemote.getConnection(function(err, connection) {
-		if (err) throw err; // not connected!
-	  	
-		connection.query("select * from datos", (err, result, fields) => {
-			// Si hay error
-			if (err) throw err;
+	usuarioDao.getRemote(request, response); 
+});
 
-			// Ok va respuesta a la consola tambien 
-			console.log(result);
-			response.send(result); 
-
-			connection.release();
-		});
-	});
+app.get('/usuario', (request, response) => {
+	usuarioDao.getUsuario(request, response); 
 });
 
 app.listen(process.env.PORT || 5001, () => {
